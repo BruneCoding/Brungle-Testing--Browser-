@@ -42,7 +42,7 @@
     authDomain: "testing-brungle-54a9f.firebaseapp.com",
     databaseURL: "https://testing-brungle-54a9f-default-rtdb.firebaseio.com",
     projectId: "testing-brungle-54a9f",
-    storageBucket: "testing-brungle-54a9f.firebasestorage.app",
+    storageBucket: "testing-brungle-54a9f.appspot.com",
     messagingSenderId: "558119080810",
     appId: "1:558119080810:web:0b35d83f64d488ae5d4b13"
   };
@@ -50,12 +50,21 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  document.getElementById("query").addEventListener("keydown", async (e) => {
+  const input = document.getElementById("query");
+
+  input.addEventListener("keydown", async (e) => {
     if (e.key === "Enter") {
-      const input = document.getElementById("query").value.trim();
-      if (input !== "") {
-        await set(ref(db, "search/query"), input);
-        window.location.href = "https://testing-bruh-brungle.pages.dev/";
+      const queryText = input.value.trim();
+      console.log("Entered text:", queryText);
+
+      if (queryText !== "") {
+        try {
+          await set(ref(db, "search/query"), queryText);
+          console.log("Query saved to Firebase.");
+          window.location.href = "https://testing-bruh-brungle.pages.dev";
+        } catch (err) {
+          console.error("Error saving to Firebase:", err);
+        }
       }
     }
   });
