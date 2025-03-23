@@ -26,8 +26,8 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  transition: all 0.3s ease-in-out;
-  transition: border 0.025s ease-in-out !important;
+  transition: all 0.3s ease-in-out, border 0.025s ease-in-out !important;
+
 }
 
 .searchBar:hover, .searchBar:focus-within {
