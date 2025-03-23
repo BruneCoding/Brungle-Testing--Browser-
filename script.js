@@ -1,4 +1,4 @@
-console.log("Version 0.0.1");
+console.log("Version 0.1.4");
 let rotation = 0;
 let isFrontVisible = true;
 let db;
