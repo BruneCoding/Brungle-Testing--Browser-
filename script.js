@@ -1,4 +1,4 @@
-console.log("Version 0.1.4");
+console.log("Version 0.1.5");
 let rotation = 0;
 let isFrontVisible = true;
 let db;
@@ -70,3 +70,30 @@ document.getElementById("query").addEventListener("keydown", function (e) {
     }
   }
 });
+
+// Deleting Data Function
+function deleteState() {
+  const tx = db.transaction("state", "readwrite");
+  const store = tx.objectStore("state");
+  store.delete(1);
+}
+const pressedKeys = new Set();
+
+document.addEventListener("keydown", (e) => {
+  pressedKeys.add(e.key.toUpperCase());
+  if (
+    pressedKeys.has("E") &&
+    pressedKeys.has("F") &&
+    pressedKeys.has("G") &&
+    pressedKeys.has("H")
+  ) {
+    deleteState();
+    console.log("State deleted");
+  }
+});
+
+document.addEventListener("keyup", (e) => {
+  pressedKeys.delete(e.key.toUpperCase());
+});
+
+
