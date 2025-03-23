@@ -30,7 +30,7 @@ body {
   transition: border 0.025s ease-in-out !important;
 }
 
-.searchBar:hover {
+.searchBar:hover, .searchBar:focus-within {
   box-shadow: 0 0 50px rgba(255, 255, 255, 0.25);
   background: #484a54;
   border: 1px solid rgba(255, 255, 255, 0.25);
