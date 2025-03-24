@@ -1,4 +1,63 @@
-console.log("Version 0.1.5");
+console.log("version 1.1.0");
+
+const searchBar = document.querySelector(".searchBar");
+
+document.querySelector(".fa-microphone").addEventListener("click", function () {
+  const searchInput = document.getElementById("query");
+  const searchBar = document.querySelector(".searchBar");
+  const microPhone = document.querySelector(".fa-microphone");
+
+  if ("webkitSpeechRecognition" in window) {
+    const recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = function () {
+      searchInput.placeholder = "Listening...";
+      console.log("user in listening mode.");
+      microPhone.style.color = "#d7c6ee";
+      microPhone.style.scale = "1.2";
+      searchBar.classList.add("searchBar-active");
+    };
+
+    recognition.onresult = function (event) {
+      const transcript = event.results[0][0].transcript;
+      searchInput.value = transcript;
+      searchInput.placeholder = "Search Brungle...";
+      microPhone.style.color = "#eaeaea";
+      microPhone.style.scale = "1";
+      searchBar.classList.remove("searchBar-active");
+    };
+
+    recognition.onerror = function (event) {
+      searchInput.placeholder =
+        "random bug flew into code and caused a error in recognition: " +
+        event.error;
+      setTimeout(() => {
+        searchInput.placeholder = "Search Brungle...";
+      }, 3000);
+
+      searchBar.classList.remove("searchBar-active");
+    };
+
+    recognition.onend = function () {
+      searchInput.placeholder = "Search Brungle...";
+
+      searchBar.classList.remove("searchBar-active");
+    };
+
+    recognition.start();
+  } else {
+    searchInput.placeholder =
+      "Your device is so old, that even voice recognition ( cerca 2017 ) is not supported. i truly feel sorry... ig its time to beg parents?";
+    setTimeout(() => {
+      searchInput.placeholder = "Search Brungle...";
+    }, 3000);
+  }
+});
+
+//code
+
 let rotation = 0;
 let isFrontVisible = true;
 let db;
@@ -71,7 +130,6 @@ document.getElementById("query").addEventListener("keydown", function (e) {
   }
 });
 
-// Deleting Data Function
 function deleteState() {
   const tx = db.transaction("state", "readwrite");
   const store = tx.objectStore("state");
@@ -95,5 +153,3 @@ document.addEventListener("keydown", (e) => {
 document.addEventListener("keyup", (e) => {
   pressedKeys.delete(e.key.toUpperCase());
 });
-
-
