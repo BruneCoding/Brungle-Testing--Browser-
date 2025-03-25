@@ -12,6 +12,31 @@ body {
   height: 100vh;
 }
 
+.fa-paperclip {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 15px;
+}
+
+.fa-paperclip:hover,
+.fa-microphone:hover {
+  color: rgb(178, 121, 255);
+  scale: 1.1;
+}
+
+#imagePreviewContainer {
+  background: #3e404d90;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  position: absolute;
+  display: inline-block;
+  margin-top: -50px;
+}
+
+#removeImageBtn:hover {
+  background: #ff5252 !important;
+}
 .searchBar {
   position: absolute;
   top: 50%;
@@ -27,10 +52,10 @@ body {
   align-items: center;
   gap: 16px;
   transition: all 0.3s ease-in-out, border 0.025s ease-in-out !important;
-
 }
 
-.searchBar:hover, .searchBar:focus-within {
+.searchBar:hover,
+.searchBar:focus-within {
   box-shadow: 0 0 50px rgba(255, 255, 255, 0.25);
   background: #484a54;
   border: 1px solid rgba(255, 255, 255, 0.25);
