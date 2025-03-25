@@ -12,10 +12,11 @@ document.querySelector(".fa-microphone").addEventListener("click", function () {
     recognition.continuous = false;
     recognition.interimResults = false;
 
+    
     recognition.onstart = function () {
       searchInput.placeholder = "Listening...";
       console.log("user in listening mode.");
-      microPhone.style.color = "#d7c6ee";
+      microPhone.style.color = "rgb(178,121,255)";
       microPhone.style.scale = "1.2";
       searchBar.classList.add("searchBar-active");
     };
