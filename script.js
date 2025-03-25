@@ -1,9 +1,11 @@
-console.log("version 1.1.2");
+console.log("version 1.1.3");
 
+// DOM Elements
 const searchBar = document.querySelector(".searchBar");
 const paperClip = document.querySelector(".fa-paperclip");
 let uploadedImage = null;
 
+// Voice Recognition
 document.querySelector(".fa-microphone").addEventListener("click", function () {
   const searchInput = document.getElementById("query");
   const searchBar = document.querySelector(".searchBar");
@@ -56,6 +58,7 @@ document.querySelector(".fa-microphone").addEventListener("click", function () {
   }
 });
 
+// Image Upload
 paperClip.addEventListener("click", function () {
   if (!isFrontVisible) {
     const fileInput = document.createElement("input");
@@ -76,11 +79,13 @@ paperClip.addEventListener("click", function () {
   }
 });
 
+// Remove Image
 document.getElementById("removeImageBtn")?.addEventListener("click", () => {
   uploadedImage = null;
   document.getElementById("imagePreviewContainer").style.display = "none";
 });
 
+// Show Image Preview
 function showImagePreview(file) {
   const previewContainer = document.getElementById("imagePreviewContainer");
   const previewImg = document.getElementById("uploadedImagePreview");
@@ -93,6 +98,7 @@ function showImagePreview(file) {
   reader.readAsDataURL(file);
 }
 
+// Search Functionality
 document.getElementById("query").addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -111,24 +117,39 @@ document.getElementById("query").addEventListener("keydown", function (e) {
   }
 });
 
+// Improved Image Search Function
 function handleImageSearch(textQuery = "") {
   if (!uploadedImage) return;
 
-  const formData = new FormData();
-  formData.append("encoded_image", uploadedImage);
-
-  const imageUrl = URL.createObjectURL(uploadedImage);
-  let googleLensUrl = `https://lens.google.com/uploadbyurl?url=${encodeURIComponent(
-    imageUrl
-  )}`;
-
-  if (textQuery) {
-    googleLensUrl += `&hl=en&re=df&p=${encodeURIComponent(textQuery)}`;
-  }
-
-  window.location.href = googleLensUrl;
+  // Create a form to submit to Google Lens
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = `https://lens.google.com/upload?ep=ccm${textQuery ? `&st=${encodeURIComponent(textQuery)}` : ''}`;
+  form.enctype = 'multipart/form-data';
+  form.target = '_blank';
+  
+  // Create file input with our image
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.name = 'encoded_image';
+  
+  // Use DataTransfer to set the file
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(uploadedImage);
+  input.files = dataTransfer.files;
+  
+  // Submit the form
+  form.appendChild(input);
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+  
+  // Clean up
+  document.getElementById("imagePreviewContainer").style.display = "none";
+  uploadedImage = null;
 }
 
+// 3D Flip Animation and State Management
 let rotation = 0;
 let isFrontVisible = true;
 let db;
@@ -179,6 +200,7 @@ function rotateCircle() {
   createSparkles();
 }
 
+// Sparkle Animation
 function createSparkles() {
   const container = document.querySelector(".circle-container");
   for (let i = 0; i < 10; i++) {
@@ -191,6 +213,7 @@ function createSparkles() {
   }
 }
 
+// Secret Key Combination
 const pressedKeys = new Set();
 
 document.addEventListener("keydown", (e) => {
