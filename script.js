@@ -1,4 +1,4 @@
-console.log("version 1.1.3");
+console.log("version 1.1.4");
 
 // DOM Elements
 const searchBar = document.querySelector(".searchBar");
@@ -6,9 +6,8 @@ const paperClip = document.querySelector(".fa-paperclip");
 let uploadedImage = null;
 
 // Voice Recognition
-document.querySelector(".fa-microphone").addEventListener("click", function () {
+document.querySelector(".fa-microphone").addEventListener("click", function() {
   const searchInput = document.getElementById("query");
-  const searchBar = document.querySelector(".searchBar");
   const microPhone = document.querySelector(".fa-microphone");
 
   if ("webkitSpeechRecognition" in window) {
@@ -16,15 +15,14 @@ document.querySelector(".fa-microphone").addEventListener("click", function () {
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    recognition.onstart = function () {
+    recognition.onstart = function() {
       searchInput.placeholder = "Listening...";
-      console.log("user in listening mode.");
       microPhone.style.color = "rgb(178,121,255)";
       microPhone.style.scale = "1.2";
       searchBar.classList.add("searchBar-active");
     };
 
-    recognition.onresult = function (event) {
+    recognition.onresult = function(event) {
       const transcript = event.results[0][0].transcript;
       searchInput.value = transcript;
       searchInput.placeholder = "Search Brungle...";
@@ -33,25 +31,22 @@ document.querySelector(".fa-microphone").addEventListener("click", function () {
       searchBar.classList.remove("searchBar-active");
     };
 
-    recognition.onerror = function (event) {
-      searchInput.placeholder =
-        "random bug flew into code and caused a error in recognition: " +
-        event.error;
+    recognition.onerror = function(event) {
+      searchInput.placeholder = "Error: " + event.error;
       setTimeout(() => {
         searchInput.placeholder = "Search Brungle...";
       }, 3000);
       searchBar.classList.remove("searchBar-active");
     };
 
-    recognition.onend = function () {
+    recognition.onend = function() {
       searchInput.placeholder = "Search Brungle...";
       searchBar.classList.remove("searchBar-active");
     };
 
     recognition.start();
   } else {
-    searchInput.placeholder =
-      "Your device is so old, that even voice recognition ( cerca 2017 ) is not supported. i truly feel sorry... ig its time to beg parents?";
+    searchInput.placeholder = "Voice search not supported";
     setTimeout(() => {
       searchInput.placeholder = "Search Brungle...";
     }, 3000);
@@ -59,7 +54,7 @@ document.querySelector(".fa-microphone").addEventListener("click", function () {
 });
 
 // Image Upload
-paperClip.addEventListener("click", function () {
+paperClip.addEventListener("click", function() {
   if (!isFrontVisible) {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
@@ -75,7 +70,7 @@ paperClip.addEventListener("click", function () {
     };
     fileInput.click();
   } else {
-    alert("Unsupported Search Engine. Try Google");
+    alert("Image search only available in Google mode");
   }
 });
 
@@ -99,54 +94,73 @@ function showImagePreview(file) {
 }
 
 // Search Functionality
-document.getElementById("query").addEventListener("keydown", function (e) {
+document.getElementById("query").addEventListener("keydown", function(e) {
   if (e.key === "Enter") {
     e.preventDefault();
-    const query = encodeURIComponent(this.value.trim());
+    const query = this.value.trim();
 
     if (isFrontVisible) {
       if (query)
-        window.location.href = `https://testing-bruh-brungle.pages.dev/#${query}`;
+        window.location.href = `https://testing-bruh-brungle.pages.dev/#${encodeURIComponent(query)}`;
     } else {
       if (uploadedImage) {
         handleImageSearch(query);
       } else if (query) {
-        window.location.href = `https://www.google.com/search?q=${query}`;
+        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
       }
     }
   }
 });
 
-// Improved Image Search Function
+// Google Lens Image Search (Fixed)
 function handleImageSearch(textQuery = "") {
   if (!uploadedImage) return;
 
-  // Create a form to submit to Google Lens
+  // Create a temporary form
   const form = document.createElement('form');
   form.method = 'POST';
-  form.action = `https://lens.google.com/upload?ep=ccm${textQuery ? `&st=${encodeURIComponent(textQuery)}` : ''}`;
+  form.action = 'https://lens.google.com/upload';
   form.enctype = 'multipart/form-data';
   form.target = '_blank';
-  
-  // Create file input with our image
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.name = 'encoded_image';
-  
+  form.style.display = 'none';
+
+  // Add ep=ccm parameter
+  const epInput = document.createElement('input');
+  epInput.type = 'hidden';
+  epInput.name = 'ep';
+  epInput.value = 'ccm';
+  form.appendChild(epInput);
+
+  // Add text query if available
+  if (textQuery) {
+    const stInput = document.createElement('input');
+    stInput.type = 'hidden';
+    stInput.name = 'st';
+    stInput.value = textQuery;
+    form.appendChild(stInput);
+  }
+
+  // Create file input
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.name = 'encoded_image';
+
   // Use DataTransfer to set the file
   const dataTransfer = new DataTransfer();
   dataTransfer.items.add(uploadedImage);
-  input.files = dataTransfer.files;
-  
-  // Submit the form
-  form.appendChild(input);
+  fileInput.files = dataTransfer.files;
+  form.appendChild(fileInput);
+
+  // Add form to document and submit
   document.body.appendChild(form);
   form.submit();
-  document.body.removeChild(form);
-  
-  // Clean up
-  document.getElementById("imagePreviewContainer").style.display = "none";
-  uploadedImage = null;
+
+  // Cleanup
+  setTimeout(() => {
+    document.body.removeChild(form);
+    document.getElementById("imagePreviewContainer").style.display = "none";
+    uploadedImage = null;
+  }, 1000);
 }
 
 // 3D Flip Animation and State Management
@@ -155,18 +169,14 @@ let isFrontVisible = true;
 let db;
 const request = indexedDB.open("ToggleDB", 1);
 
-request.onupgradeneeded = function (e) {
+request.onupgradeneeded = function(e) {
   db = e.target.result;
   db.createObjectStore("state", { keyPath: "id" });
 };
 
-request.onsuccess = function (e) {
+request.onsuccess = function(e) {
   db = e.target.result;
   loadState();
-};
-
-request.onerror = function (e) {
-  console.error("DB Error:", e);
 };
 
 function saveState() {
@@ -183,9 +193,7 @@ function loadState() {
     if (getReq.result) {
       isFrontVisible = getReq.result.isFrontVisible;
       rotation = getReq.result.rotation;
-      document.querySelector(
-        ".circle-container"
-      ).style.transform = `rotateY(${rotation}deg)`;
+      document.querySelector(".circle-container").style.transform = `rotateY(${rotation}deg)`;
     }
   };
 }
@@ -193,9 +201,7 @@ function loadState() {
 function rotateCircle() {
   rotation += 180;
   isFrontVisible = !isFrontVisible;
-  document.querySelector(
-    ".circle-container"
-  ).style.transform = `rotateY(${rotation}deg)`;
+  document.querySelector(".circle-container").style.transform = `rotateY(${rotation}deg)`;
   saveState();
   createSparkles();
 }
@@ -218,14 +224,9 @@ const pressedKeys = new Set();
 
 document.addEventListener("keydown", (e) => {
   pressedKeys.add(e.key.toUpperCase());
-  if (
-    pressedKeys.has("E") &&
-    pressedKeys.has("F") &&
-    pressedKeys.has("G") &&
-    pressedKeys.has("H")
-  ) {
+  if (pressedKeys.has("E") && pressedKeys.has("F") && pressedKeys.has("G") && pressedKeys.has("H")) {
     deleteState();
-    console.log("State deleted");
+    console.log("State reset");
   }
 });
 
