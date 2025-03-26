@@ -1,7 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-console.log("test")
-alert("test")
+console.log(
+  "%cBeta Version. [v1.1.5]", 
+  "color: #FF5733; font-size: 16px; font-weight: bold;"
+);
+
+console.log(
+  "%cUpdated Features:", 
+  "color: #3498DB; font-size: 14px; font-weight: bold;"
+);
+
+console.log(
+  "%c==> Added AI Assistant ( NodeChat+ )", 
+  "color: #2ECC71; font-size: 13px;"
+);
 
 const searchBar = document.querySelector(".searchBar");
 const paperClip = document.querySelector(".fa-paperclip");
