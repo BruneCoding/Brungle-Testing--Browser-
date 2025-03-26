@@ -429,3 +429,4 @@ closeBtn.addEventListener("click", () => {
 });
 
 initChat();
+//
