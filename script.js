@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 console.log(
-  "%cBeta Version. [v1.1.5] ... Post Roll Tweaks", 
+  "%cBeta Version. [v1.1.5] ... Post Roll Tweaks 3", 
   "color: #FF5733; font-size: 16px; font-weight: bold;"
 );
 
