@@ -444,5 +444,20 @@ closeBtn.addEventListener("click", () => {
 });
 
 initChat();
-//
+
+
+  
+  function devDeleteMemory() {
+
+    localStorage.removeItem("nodeChatHistory");
+
+    chatHistory = [{
+        role: "bot",
+        content: "Hello! How can I help you today?"
+    }];
+
+    initChat();
+    
+    console.log("NodeChat+ memory has been cleared.");
+}
 });
