@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+function rotateCircle() {
+  rotation += 180;
+  isFrontVisible = !isFrontVisible;
+  document.querySelector(
+    ".circle-container"
+  ).style.transform = `rotateY(${rotation}deg)`;
+  saveState();
+  createSparkles();
+}
+  
 console.log(
   "%cBeta Version. [v1.1.5] ... Post Roll Tweaks 3", 
   "color: #FF5733; font-size: 16px; font-weight: bold;"
@@ -204,15 +213,7 @@ function loadState() {
   };
 }
 
-function rotateCircle() {
-  rotation += 180;
-  isFrontVisible = !isFrontVisible;
-  document.querySelector(
-    ".circle-container"
-  ).style.transform = `rotateY(${rotation}deg)`;
-  saveState();
-  createSparkles();
-}
+
 
 function createSparkles() {
   const container = document.querySelector(".circle-container");
