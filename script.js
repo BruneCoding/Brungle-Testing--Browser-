@@ -2,7 +2,6 @@ console.log("Version (v1.1.5) [BETA] Test Pull");
 console.log("Updated features:");
 console.log("==> AI Chat");
 
-const sendButton = document.getElementById("sendButton");
 const searchBar = document.querySelector(".searchBar");
 const paperClip = document.querySelector(".fa-paperclip");
 let uploadedImage = null;
