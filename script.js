@@ -1,12 +1,12 @@
-console.log("version 1.1.4");
+console.log("Version (v1.1.5) [BETA]");
+console.log("Updated features:");
+console.log("==> AI Chat");
 
-// DOM Elements
 const searchBar = document.querySelector(".searchBar");
 const paperClip = document.querySelector(".fa-paperclip");
 let uploadedImage = null;
 
-// Voice Recognition
-document.querySelector(".fa-microphone").addEventListener("click", function() {
+document.querySelector(".fa-microphone").addEventListener("click", function () {
   const searchInput = document.getElementById("query");
   const microPhone = document.querySelector(".fa-microphone");
 
@@ -15,14 +15,14 @@ document.querySelector(".fa-microphone").addEventListener("click", function() {
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    recognition.onstart = function() {
+    recognition.onstart = function () {
       searchInput.placeholder = "Listening...";
       microPhone.style.color = "rgb(178,121,255)";
       microPhone.style.scale = "1.2";
       searchBar.classList.add("searchBar-active");
     };
 
-    recognition.onresult = function(event) {
+    recognition.onresult = function (event) {
       const transcript = event.results[0][0].transcript;
       searchInput.value = transcript;
       searchInput.placeholder = "Search Brungle...";
@@ -31,7 +31,7 @@ document.querySelector(".fa-microphone").addEventListener("click", function() {
       searchBar.classList.remove("searchBar-active");
     };
 
-    recognition.onerror = function(event) {
+    recognition.onerror = function (event) {
       searchInput.placeholder = "Error: " + event.error;
       setTimeout(() => {
         searchInput.placeholder = "Search Brungle...";
@@ -39,7 +39,7 @@ document.querySelector(".fa-microphone").addEventListener("click", function() {
       searchBar.classList.remove("searchBar-active");
     };
 
-    recognition.onend = function() {
+    recognition.onend = function () {
       searchInput.placeholder = "Search Brungle...";
       searchBar.classList.remove("searchBar-active");
     };
@@ -53,8 +53,7 @@ document.querySelector(".fa-microphone").addEventListener("click", function() {
   }
 });
 
-// Image Upload
-paperClip.addEventListener("click", function() {
+paperClip.addEventListener("click", function () {
   if (!isFrontVisible) {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
@@ -74,13 +73,11 @@ paperClip.addEventListener("click", function() {
   }
 });
 
-// Remove Image
 document.getElementById("removeImageBtn")?.addEventListener("click", () => {
   uploadedImage = null;
   document.getElementById("imagePreviewContainer").style.display = "none";
 });
 
-// Show Image Preview
 function showImagePreview(file) {
   const previewContainer = document.getElementById("imagePreviewContainer");
   const previewImg = document.getElementById("uploadedImagePreview");
@@ -93,69 +90,64 @@ function showImagePreview(file) {
   reader.readAsDataURL(file);
 }
 
-// Search Functionality
-document.getElementById("query").addEventListener("keydown", function(e) {
+document.getElementById("query").addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
     const query = this.value.trim();
 
     if (isFrontVisible) {
       if (query)
-        window.location.href = `https://testing-bruh-brungle.pages.dev/#${encodeURIComponent(query)}`;
+        window.location.href = `https://testing-bruh-brungle.pages.dev/#${encodeURIComponent(
+          query
+        )}`;
     } else {
       if (uploadedImage) {
         handleImageSearch(query);
       } else if (query) {
-        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(
+          query
+        )}`;
       }
     }
   }
 });
 
-// Google Lens Image Search (Fixed)
 function handleImageSearch(textQuery = "") {
   if (!uploadedImage) return;
 
-  // Create a temporary form
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = 'https://lens.google.com/upload';
-  form.enctype = 'multipart/form-data';
-  form.target = '_blank';
-  form.style.display = 'none';
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "https://lens.google.com/upload";
+  form.enctype = "multipart/form-data";
+  form.target = "_blank";
+  form.style.display = "none";
 
-  // Add ep=ccm parameter
-  const epInput = document.createElement('input');
-  epInput.type = 'hidden';
-  epInput.name = 'ep';
-  epInput.value = 'ccm';
+  const epInput = document.createElement("input");
+  epInput.type = "hidden";
+  epInput.name = "ep";
+  epInput.value = "ccm";
   form.appendChild(epInput);
 
-  // Add text query if available
   if (textQuery) {
-    const stInput = document.createElement('input');
-    stInput.type = 'hidden';
-    stInput.name = 'st';
+    const stInput = document.createElement("input");
+    stInput.type = "hidden";
+    stInput.name = "st";
     stInput.value = textQuery;
     form.appendChild(stInput);
   }
 
-  // Create file input
-  const fileInput = document.createElement('input');
-  fileInput.type = 'file';
-  fileInput.name = 'encoded_image';
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.name = "encoded_image";
 
-  // Use DataTransfer to set the file
   const dataTransfer = new DataTransfer();
   dataTransfer.items.add(uploadedImage);
   fileInput.files = dataTransfer.files;
   form.appendChild(fileInput);
 
-  // Add form to document and submit
   document.body.appendChild(form);
   form.submit();
 
-  // Cleanup
   setTimeout(() => {
     document.body.removeChild(form);
     document.getElementById("imagePreviewContainer").style.display = "none";
@@ -163,18 +155,17 @@ function handleImageSearch(textQuery = "") {
   }, 1000);
 }
 
-// 3D Flip Animation and State Management
 let rotation = 0;
 let isFrontVisible = true;
 let db;
 const request = indexedDB.open("ToggleDB", 1);
 
-request.onupgradeneeded = function(e) {
+request.onupgradeneeded = function (e) {
   db = e.target.result;
   db.createObjectStore("state", { keyPath: "id" });
 };
 
-request.onsuccess = function(e) {
+request.onsuccess = function (e) {
   db = e.target.result;
   loadState();
 };
@@ -193,7 +184,9 @@ function loadState() {
     if (getReq.result) {
       isFrontVisible = getReq.result.isFrontVisible;
       rotation = getReq.result.rotation;
-      document.querySelector(".circle-container").style.transform = `rotateY(${rotation}deg)`;
+      document.querySelector(
+        ".circle-container"
+      ).style.transform = `rotateY(${rotation}deg)`;
     }
   };
 }
@@ -201,12 +194,13 @@ function loadState() {
 function rotateCircle() {
   rotation += 180;
   isFrontVisible = !isFrontVisible;
-  document.querySelector(".circle-container").style.transform = `rotateY(${rotation}deg)`;
+  document.querySelector(
+    ".circle-container"
+  ).style.transform = `rotateY(${rotation}deg)`;
   saveState();
   createSparkles();
 }
 
-// Sparkle Animation
 function createSparkles() {
   const container = document.querySelector(".circle-container");
   for (let i = 0; i < 10; i++) {
@@ -219,12 +213,16 @@ function createSparkles() {
   }
 }
 
-// Secret Key Combination
 const pressedKeys = new Set();
 
 document.addEventListener("keydown", (e) => {
   pressedKeys.add(e.key.toUpperCase());
-  if (pressedKeys.has("E") && pressedKeys.has("F") && pressedKeys.has("G") && pressedKeys.has("H")) {
+  if (
+    pressedKeys.has("e") &&
+    pressedKeys.has("F") &&
+    pressedKeys.has("G") &&
+    pressedKeys.has("H")
+  ) {
     deleteState();
     console.log("State reset");
   }
@@ -239,3 +237,195 @@ function deleteState() {
   const store = tx.objectStore("state");
   store.delete(1);
 }
+
+// messages for NodeChat
+const chatMenu = document.querySelector(".chat-menu");
+const chatButton = document.querySelector(".chat-button");
+const messagesContainer = document.getElementById("messages-container");
+const messageInput = document.getElementById("message-input");
+const sendButton = document.getElementById("send-button");
+const typingIndicator = document.getElementById("typing-indicator");
+const closeBtn = document.querySelector(".close-btn");
+
+const API_ENDPOINT =
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCabBCysAE2M7-0DdmXa62VMfE61Js6714";
+
+let chatHistory = JSON.parse(localStorage.getItem("nodeChatHistory")) || [];
+
+function initChat() {
+  messagesContainer.innerHTML = "";
+
+  if (chatHistory.length === 0) {
+    const initialMessage = {
+      role: "bot",
+      content: "Hello! How can I help you today?"
+    };
+    chatHistory.push(initialMessage);
+    saveChatHistory();
+  }
+
+  chatHistory.forEach((message) => {
+    displayMessage(message.role, message.content);
+  });
+
+  setTimeout(() => {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }, 100);
+}
+
+function displayMessage(role, content) {
+  const messageDiv = document.createElement("div");
+  messageDiv.className = `message ${role === "user" ? "user-message" : ""}`;
+
+  if (role === "bot") {
+    messageDiv.innerHTML = formatAISummary(content);
+  } else {
+    messageDiv.textContent = content;
+  }
+
+  messagesContainer.appendChild(messageDiv);
+
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function formatAISummary(text) {
+  return text
+    .replace(/\*(.*?)\*/g, "<b>$1</b>")
+    .replace(/_(.*?)_/g, "<u>$1</u>")
+    .replace(/\^(.*?)\^/g, "<i>$1</i>")
+    .replace(/\/new\//g, "<br><br>");
+}
+
+function saveChatHistory() {
+  localStorage.setItem("nodeChatHistory", JSON.stringify(chatHistory));
+}
+
+async function sendMessageToAI(message) {
+  try {
+    typingIndicator.style.display = "block";
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    const conversationHistory = chatHistory.map((msg) => ({
+      role: msg.role === "user" ? "user" : "model",
+      parts: [{ text: msg.content }]
+    }));
+
+    conversationHistory.push({
+      role: "user",
+      parts: [{ text: message }]
+    });
+
+    const prompt = {
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `Your name is NodeChat+ and you are a ai assitant / chatbot. whenever you say you are a ai assistant, say i am [Brungle] NodeChat+ Answer this in a very friendly tone(doesnt need to be a quesiton)! You're an AI assistant / chatbot. 
+              you do not need a question to answer. just talk basically and try answering their question if they have one. if not, engage friendly in a conversation :D
+                                    Your job is to help the user in a slightly childish but still informative and helpful way. 
+                                    Be like a fun mix of Grok X and a curious assistant. Keep it short, max 100 words.
+
+Start by answering the query clearly in the first sentence, followed by a second short sentence. These two should be in the same paragraph. After that, write a new paragraph starting with /new/ (two line breaks).
+
+Use ONLY these formatting markers:
+- *word* → bold
+- _word_ → underline
+- ^word^ → italic
+
+⚠️ DO NOT use HTML tags like <b>, <u>, <br>, etc. 
+⚠️ DO NOT use Markdown-style **double asterisks** for bold.
+
+Only use *word* for important stats or keywords like *3.9 billion* — never for full paragraphs.
+
+If the query is a math problem, make the FIRST sentence fully bold using *...*.
+
+still try to use bold but dont over do it!
+
+Add fun emojis like ✨, 🤯, 🥳 where relevant, but don't overdo it.
+
+dont say oops you dont have a question or smth. ignore it.
+
+Also, if the user types in Clear Chat or anything similar to that, requesting chat history to be cleared, ignore the previous conversation.
+Here's our conversation so far:`
+            },
+            ...conversationHistory.map((msg) => ({
+              text: `${msg.role}: ${msg.parts[0].text}`
+            }))
+          ]
+        }
+      ]
+    };
+
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(prompt)
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    let aiResponse = data.candidates[0].content.parts[0].text;
+
+    aiResponse = aiResponse.replace(/^model:\s*/i, "").trim();
+
+    return aiResponse;
+  } catch (error) {
+    console.error("Error calling AI API:", error);
+    return "Oops! Something went wrong. Please try again later. 🫠";
+  } finally {
+    typingIndicator.style.display = "none";
+  }
+}
+
+async function handleSend() {
+  const message = messageInput.value.trim();
+  if (!message) return;
+
+  displayMessage("user", message);
+  chatHistory.push({
+    role: "user",
+    content: message
+  });
+  saveChatHistory();
+
+  messageInput.value = "";
+
+  const aiResponse = await sendMessageToAI(message);
+
+  displayMessage("bot", aiResponse);
+  chatHistory.push({
+    role: "bot",
+    content: aiResponse
+  });
+  saveChatHistory();
+}
+
+sendButton.addEventListener("click", handleSend);
+
+messageInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    handleSend();
+  }
+});
+
+chatButton.addEventListener("click", () => {
+  chatMenu.style.visibility = "visible";
+  chatMenu.style.marginLeft = "20px";
+  chatButton.style.visibility = "hidden";
+  console.log("NodeChat+ has been opened.");
+});
+
+closeBtn.addEventListener("click", () => {
+  chatButton.style.visibility = "visible";
+  chatMenu.style.marginLeft = "-365px";
+  console.log("NodeChat+ has been closed");
+});
+
+initChat();
