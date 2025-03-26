@@ -1,4 +1,4 @@
-console.log("Version (v1.1.5) [BETA]");
+console.log("Version (v1.1.5) [BETA] Test Pull");
 console.log("Updated features:");
 console.log("==> AI Chat");
 
@@ -417,6 +417,7 @@ messageInput.addEventListener("keypress", (e) => {
 });
 
 chatButton.addEventListener("click", () => {
+  console.log("clicked 1")
   chatMenu.style.visibility = "visible";
   chatMenu.style.marginLeft = "20px";
   chatButton.style.visibility = "hidden";
@@ -424,6 +425,7 @@ chatButton.addEventListener("click", () => {
 });
 
 closeBtn.addEventListener("click", () => {
+    console.log("clicked 2")
   chatButton.style.visibility = "visible";
   chatMenu.style.marginLeft = "-365px";
   console.log("NodeChat+ has been closed");
