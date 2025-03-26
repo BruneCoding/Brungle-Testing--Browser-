@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function() {
+
 console.log("test")
 alert("test")
 
@@ -431,3 +433,4 @@ closeBtn.addEventListener("click", () => {
 
 initChat();
 //
+});
