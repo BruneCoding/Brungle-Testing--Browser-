@@ -313,6 +313,20 @@ function saveChatHistory() {
   localStorage.setItem("nodeChatHistory", JSON.stringify(chatHistory));
 }
 
+  function deleteMemory() {
+
+    localStorage.removeItem("nodeChatHistory");
+
+    chatHistory = [{
+        role: "bot",
+        content: "Hello! How can I help you today?"
+    }];
+
+    initChat();
+    
+    console.log("NodeChat+ memory has been cleared.");
+}
+
 async function sendMessageToAI(message) {
   try {
     typingIndicator.style.display = "block";
@@ -447,17 +461,5 @@ initChat();
 
 
   
-  function devDeleteMemory() {
-
-    localStorage.removeItem("nodeChatHistory");
-
-    chatHistory = [{
-        role: "bot",
-        content: "Hello! How can I help you today?"
-    }];
-
-    initChat();
-    
-    console.log("NodeChat+ memory has been cleared.");
-}
+  
 });
