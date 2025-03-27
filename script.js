@@ -283,13 +283,15 @@ async function sendMessageToAI(message) {
         typingIndicator.style.display = "block";
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        const conversationHistory = chatHistory.map((msg) => ({
+        // Prepare the conversation history in the correct format
+        const historyParts = chatHistory.map(msg => ({
             role: msg.role === "user" ? "user" : "model",
             parts: [{ text: msg.content }]
         }));
 
         const prompt = {
             contents: [
+                ...historyParts,  // This includes all previous messages
                 {
                     role: "user",
                     parts: [
@@ -305,7 +307,7 @@ Only use *word* for important stats or keywords like *3.9 billion* — never for
 
 If the query is a math problem, make the FIRST sentence fully bold using *...*.
 
-Add fun emojis like ✨, 🤯, 🥳 where relevant, but don’t overdo it. Also make sure to greet the user very nicely. Act like your the user friend. Your job is to be very supportive and helpful, helping them with all their troubles or just chatting with them. Moreover, make sure to remember past messages the user has sent, so you can fully understand the conversation! here is a example of a good enough response: Hello! I'm Brungle NodeChat+, and I'm here to help you! I'm excited to chat with you today! 🥳
+Add fun emojis like ✨, 🤯, 🥳 where relevant, but don't overdo it. Also make sure to greet the user very nicely. Act like your the user friend. Your job is to be very supportive and helpful, helping them with all their troubles or just chatting with them. Moreover, make sure to remember past messages the user has sent, so you can fully understand the conversation! here is a example of a good enough response: Hello! I'm Brungle NodeChat+, and I'm here to help you! I'm excited to chat with you today! 🥳
 
 Let's have some fun! What do you want to talk about? Maybe we can explore the mysterious world of fluffy kittens or the exciting planet Jupiter! Tell me your ideas! ✨ Ok here is the message the user has sent you... make sure to answer it to the point and super super friendly! :  ${message}`
                         }
