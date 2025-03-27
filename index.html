@@ -80,3 +80,14 @@
     <button class="send-button" id="send-button">Send</button>
   </div>
 </div>
+
+<!--DOM configuration script  -->
+<script>function rotateCircle() {
+  rotation += 180;
+  isFrontVisible = !isFrontVisible;
+  document.querySelector(
+    ".circle-container"
+  ).style.transform = `rotateY(${rotation}deg)`;
+  saveState();
+  createSparkles();
+}</script>
