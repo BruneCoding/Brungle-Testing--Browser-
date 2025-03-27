@@ -1,13 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-function rotateCircle() {
-  rotation += 180;
-  isFrontVisible = !isFrontVisible;
-  document.querySelector(
-    ".circle-container"
-  ).style.transform = `rotateY(${rotation}deg)`;
-  saveState();
-  createSparkles();
-}
+// removed rotate circle to html
   
 console.log(
   "%cBeta Version. [v1.1.5] ... Post Roll Tweaks 3", 
