@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-// removed rotate circle to html
+
   
 console.log(
-  "%cBeta Version. [v1.1.5] ... Post Roll Tweaks 3", 
+  "%cBeta Version. [v1.1.5] ... Post Roll 4", 
   "color: #FF5733; font-size: 16px; font-weight: bold;"
 );
 
@@ -12,9 +12,10 @@ console.log(
 );
 
 console.log(
-  "%c==> Added AI Assistant ( NodeChat+ )", 
+  "%c==> DOM configuration to fix Search Engine toggle", 
   "color: #2ECC71; font-size: 13px;"
 );
+  
 
 const searchBar = document.querySelector(".searchBar");
 const paperClip = document.querySelector(".fa-paperclip");
